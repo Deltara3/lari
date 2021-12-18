@@ -1,2 +1,2 @@
-# larimar
+# Larimar
 An experimental programming language.

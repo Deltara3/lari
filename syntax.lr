@@ -1,0 +1,15 @@
+// Import as a new name
+import another_example_lib ~> example_name;
+
+// Import items from library
+import example_lib: {item, another_item};
+
+// Show off function declaration.
+fn example: (example_arg: @example_type) -> @example_type {
+    return example_arg;
+}
+
+// Main obviously
+fn main: () -> @int {
+    return 0;
+}
