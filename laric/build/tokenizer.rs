@@ -1,3 +1,5 @@
+use regex::Regex;
+
 #[derive(Debug)]
 pub enum Token {
     Arrow,
@@ -21,27 +23,15 @@ pub fn tokenize(code: &str) -> Vec<Token> {
     // TODO the actual tokenizer
     // TODO return Vec<Token>
     let mut tokens: Vec<Token> = vec![];
-    // TODO fix the fact that comments need spaces to work
-    let in_comment = 0; // 0: not in comment, 1: in line comment, 2: in block comment
-    for word in code.split(" ") {
-        tokens.push(match word {
-            "->" => Token::Arrow,
-            "~>" => Token::FunnyArrow,
-            "fn" => Token::Function,
-            "import" => Token::Import,
-            ":" => Token::Colon,
-            "return" => Token::Return,
-            "{" => Token::OpeningCurlyBracket,
-            "}" => Token::ClosingCurlyBracket,
-            "//" => Token::Comment,
-            "/*" => Token::Comment,
-            "*/" => Token::ClosingComment,
-            "\n" => Token::Newline,
-            ";" =>Token::Semi,
-            _ => Token::Name {
-                name: word.to_string()
-            },
-        });
-    }
+
+    // load in regexes
+    // TODO add regexes for the rest of what you wanna add
+    let line_comment = Regex::new(r"(?m)/{2,} .*$").unwrap(); // match anything that starts with // and beyond
+
+    // strip comments
+    let code_w_stripped_comments = line_comment.replace_all(code, " ");
+
+    println!("{}", code_w_stripped_comments);
+
     return tokens; 
 }
