@@ -114,6 +114,10 @@ pub enum Token {
     #[token("}")]
     RBrack,
 
+    // Actually other
+    #[token("🎷🐛")]
+    Sax,
+
     // Error
     #[error]
     Err,
