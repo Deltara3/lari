@@ -1,8 +1,28 @@
 use logos::Logos;
 
+fn conv_str(string: &str) -> String {
+    string
+        .replace("\r", "")
+        .replace("\\n", "\n")
+        .replace("\\r", "\r")
+        .replace("\\\"", "\"")
+        .replace("\\'", "'")
+}
+
 #[derive(Logos, Debug, PartialEq, Clone)]
 pub enum Token {
     // Type
+    #[regex(r"([0-9]+(\.[0-9]*)?|\.[0-9]*)", |lex| lex.slice().parse::<u64>())]
+    Int(u64),
+
+    #[regex(r#""(?:\\.|[^\\"])*"|'(?:\\.|[^\\'])*'"#, |string| conv_str(&string.slice()[1..string.slice().len()-1]))]
+    Str(String),
+
+    #[regex(r"[a-zA-Z_ඞ][a-zA-Z_0-9ඞ]*", |lex| lex.slice().to_string())]
+    Ident(String),
+
+    #[token("@")]
+    TypeIdent,
 
     // Operator
     #[token("+=")]
@@ -47,6 +67,8 @@ pub enum Token {
     Not,
     #[token(":")]
     Colon,
+    #[token("::")]
+    DblColon,
     #[token(";")]
     SemiColon,
     #[token("==")]
@@ -87,8 +109,10 @@ pub enum Token {
     // Keyword
     #[token("fn")]
     Func,
-    #[token("import")]
-    Import,
+    #[token("use")]
+    Use,
+    #[token("pub")]
+    Pub,
 
     // Control
     #[token("if")]
@@ -120,6 +144,7 @@ pub enum Token {
 
     // Error
     #[error]
+    #[regex(r"[ \t\n\f]+", logos::skip)]
     Err,
 
     // File
