@@ -19,8 +19,12 @@ pub enum Token {
     PowEq,
     #[token("+")]
     Inc,
+    #[token("++")]
+    DblInc,
     #[token("-")]
     Dec,
+    #[token("--")]
+    DblDec,
     #[token("*")]
     Mul,
     #[token("/")]
@@ -43,10 +47,12 @@ pub enum Token {
     Not,
     #[token(":")]
     Colon,
+    #[token(";")]
+    SemiColon,
     #[token("==")]
     Eq,
-    #[token("===")]
-    CompEq,
+    // #[token("===")]
+    // CompEq,
     #[token("=")]
     Assign,
     #[token("||")]
@@ -110,11 +116,10 @@ pub enum Token {
 
     // Error
     #[error]
-    #[regex(r"[ \t\f]+", logos::skip)]
-    Error,
+    Err,
 
     // File
-    #[regex(r";|\n|\r")]
+    #[regex(r"\r\n|\r|\n")]
     Eol,
     Eof
 }

@@ -1,4 +1,5 @@
 mod lexer;
+mod repl;
 
 use clap::{Arg, App, SubCommand};
 
@@ -25,4 +26,6 @@ fn main() {
             .help("Output file")
             .takes_value(true))
         .get_matches();
+
+    if matches.is_present("repl") { repl::repl() }
 }
