@@ -1,4 +1,5 @@
 use logos::Logos;
+use num_derive::{FromPrimitive, ToPrimitive};
 
 fn conv_str(string: &str) -> String {
     string
@@ -9,20 +10,21 @@ fn conv_str(string: &str) -> String {
         .replace("\\'", "'")
 }
 
-#[derive(Logos, Debug, PartialEq, Clone)]
-pub enum Token {
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Logos, FromPrimitive, ToPrimitive)]
+pub(crate) enum SyntaxKind {
     // Type
-    #[regex(r"([0-9]+(\.[0-9]*)?|\.[0-9]*)", |lex| lex.slice().parse::<u64>())]
-    Int(u64),
-
+    /* Temporarily commented out.
     #[regex(r#""(?:\\.|[^\\"])*"|'(?:\\.|[^\\'])*'"#, |string| conv_str(&string.slice()[1..string.slice().len()-1]))]
     Str(String),
-
-    #[regex(r"[a-zA-Z_ඞ][a-zA-Z_0-9ඞ]*", |lex| lex.slice().to_string())]
-    Ident(String),
+    */
 
     #[token("@")]
     TypeIdent,
+
+    #[regex("[A-Za-z][A-Za-z0-9]*")]
+    Ident,
+    #[regex("[0-9]+")]
+    Int,
 
     // Operator
     #[token("+=")]
@@ -109,6 +111,8 @@ pub enum Token {
     // Keyword
     #[token("fn")]
     Func,
+    #[token("macro")]
+    Macro,
     #[token("use")]
     Use,
     #[token("pub")]
@@ -147,8 +151,35 @@ pub enum Token {
     #[regex(r"[ \t\n\f]+", logos::skip)]
     Err,
 
+    Root,
+    BinOp,
+    PreExpr,
+
     // File
     #[regex(r"\r\n|\r|\n")]
     Eol,
     Eof
+}
+
+pub(crate) struct Lexer<'a> {
+    inner: logos::Lexer<'a, SyntaxKind>
+}
+
+impl<'a> Lexer<'a> {
+    pub(crate) fn new(input: &'a str) -> Self {
+        Self {
+            inner: SyntaxKind::lexer(input)
+        }
+    }
+}
+
+impl<'a> Iterator for Lexer<'a> {
+    type Item = (SyntaxKind, &'a str);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let kind = self.inner.next()?;
+        let text = self.inner.slice();
+
+        Some((kind, text))
+    }
 }

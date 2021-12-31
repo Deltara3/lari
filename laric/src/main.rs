@@ -1,4 +1,6 @@
 mod lexer;
+mod parser;
+mod syntax;
 mod repl;
 
 use clap::{Arg, App, SubCommand};
