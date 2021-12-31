@@ -1,15 +1,6 @@
 use logos::Logos;
 use num_derive::{FromPrimitive, ToPrimitive};
 
-fn conv_str(string: &str) -> String {
-    string
-        .replace("\r", "")
-        .replace("\\n", "\n")
-        .replace("\\r", "\r")
-        .replace("\\\"", "\"")
-        .replace("\\'", "'")
-}
-
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Logos, FromPrimitive, ToPrimitive)]
 pub(crate) enum SyntaxKind {
     // Type
@@ -40,13 +31,13 @@ pub(crate) enum SyntaxKind {
     #[token("^=")]
     PowEq,
     #[token("+")]
-    Inc,
+    Add,
     #[token("++")]
-    DblInc,
+    Inc,
     #[token("-")]
-    Dec,
+    Min,
     #[token("--")]
-    DblDec,
+    Dec,
     #[token("*")]
     Mul,
     #[token("/")]
@@ -76,7 +67,7 @@ pub(crate) enum SyntaxKind {
     #[token("==")]
     Eq,
     // #[token("===")]
-    // CompEq,
+    // TypeEq,
     #[token("=")]
     Assign,
     #[token("||")]
@@ -92,9 +83,9 @@ pub(crate) enum SyntaxKind {
     #[token(",")]
     Comma,
     #[token("->")]
-    ArrR,
+    ReturnType,
     #[token("<-")]
-    ArrL,
+    Return,
     #[token("<->")]
     ArrB,
     #[token("=>")]
@@ -117,6 +108,10 @@ pub(crate) enum SyntaxKind {
     Use,
     #[token("pub")]
     Pub,
+    #[token("let")]
+    Let,
+    #[token("mut")]
+    Mutable,
 
     // Control
     #[token("if")]

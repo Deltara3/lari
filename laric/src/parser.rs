@@ -23,15 +23,6 @@ impl<'a> Parser<'a> {
 
         expr(&mut self);
 
-        /*
-        if self.peek() == Some(SyntaxKind::Int) {
-            self.builder.token(
-                Lari::kind_to_raw(SyntaxKind::Int),
-                self.lexer.slice().into()
-            )
-        }
-        */
-
         self.finish_node();
 
         Parse {

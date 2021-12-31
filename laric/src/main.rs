@@ -3,7 +3,7 @@ mod parser;
 mod syntax;
 mod repl;
 
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App};
 
 fn main() {
     // Argument parser
@@ -29,5 +29,5 @@ fn main() {
             .takes_value(true))
         .get_matches();
 
-    if matches.is_present("repl") { repl::repl() }
+    if matches.is_present("repl") { repl::repl().unwrap(); }
 }

@@ -11,7 +11,7 @@ fn expr_binding_power(p: &mut Parser, minimum_binding_power: u8) {
 
     match p.peek() {
         Some(SyntaxKind::Int) | Some(SyntaxKind::Ident) => p.bump(),
-        Some(SyntaxKind::Dec) => {
+        Some(SyntaxKind::Min) => {
             let op = PreOp::Neg;
             let ((), right_binding_power) = op.binding_power();
 
@@ -33,8 +33,8 @@ fn expr_binding_power(p: &mut Parser, minimum_binding_power: u8) {
 
     loop {
         let op = match p.peek() {
-            Some(SyntaxKind::Inc) => InOp::Inc,
-            Some(SyntaxKind::Dec) => InOp::Dec,
+            Some(SyntaxKind::Add) => InOp::Inc,
+            Some(SyntaxKind::Min) => InOp::Dec,
             Some(SyntaxKind::Mul) => InOp::Mul,
             Some(SyntaxKind::Div) => InOp::Div,
             _ => return
